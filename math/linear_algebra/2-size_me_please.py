@@ -1,17 +1,10 @@
 #!/usr/bin/env python3
+"""function to check the shape of the matrix"""
+
+
 def matrix_shape(matrix):
-    """
-    Calculates the shape of a matrix.
-
-    Args:
-        matrix (list): The matrix to calculate the shape of.
-
-    Returns:
-        list: A list of integers representing the shape of the matrix.
-    """
-    shape = []
-    while isinstance(matrix, list):
-        shape.append(len(matrix))
-        matrix = matrix[0]
-    return shape
-
+    """ return the shape of a matrix """
+    if type(matrix[0]) != list:
+        return [len(matrix)]
+    else:
+        return [len(matrix)] + matrix_shape(matrix[0])
