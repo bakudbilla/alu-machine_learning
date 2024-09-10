@@ -2,9 +2,8 @@
 """function to add 2D matrix into a new one"""
 
 
-
 def add_matrices2D(mat1, mat2):
-     """ adding two matrix element wise
+    """ adding two matrix element wise
 
     Args:
         mat1, mat2: Given matrix
@@ -13,11 +12,12 @@ def add_matrices2D(mat1, mat2):
         the sum of matrix: new matrix
 
     """
-    if len(mat1) != len(mat2) or len(mat1[0]) != len(mat2[0]):
+    if len(mat1) != len(mat2):
         return None
-    
-    # Create a new matrix by adding corresponding elements
-    result = []
-    for row1, row2 in zip(mat1, mat2):
-        new_row = [x + y for x, y in zip(row1, row2)]
-        result.append(new_row)
+    elif len(mat1[0]) != len(mat2[0]):
+        return None
+    else:
+        new_mat = [[mat1[i][j] + mat2[i][j]
+                    for j in range(len(mat1[0]))] for i in range(len(mat1))]
+        for count in new_mat:
+            return new_mat
