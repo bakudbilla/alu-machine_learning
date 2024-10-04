@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Writing a function that calculates the derivative of a polynomial"""
 
 
@@ -13,3 +14,5 @@ def poly_derivative(poly):
 
         deriv.append(poly[i]*i)
     return deriv[::-1]
+~
+
