@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Calculating a correlation matrix"""
+"""Calculating the mean and covariance of a data set"""
 import numpy as np
 
 
-def correlation(C):
-    """Function that calculates a correlation matrix"""
-    if not isinstance(C, np.ndarray):
-        raise TypeError('C must be a numpy.ndarray')
-    if len(C.shape) != 2 or C.shape[0] != C.shape[1]:
-        raise ValueError('C must be a 2D square matrix')
-    var_values = np.diag(np.sqrt(np.diag(C)))
-    new = var_values / C
-    cor = new @ C @ new
-    return cor
+def mean_cov(X):
+    """Function that calculates the mean and covariance of a data set"""
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+        raise TypeError('X must be a 2D numpy.ndarray')
+    n, d = X.shape
+    if n < 2:
+        raise ValueError("X must contain multiple data points")
+    m = np.mean(X, axis=0, keepdims=True)
+    C = np.matmul((X - m).T, (X - m)) / (n - 1)
+    return m, C
