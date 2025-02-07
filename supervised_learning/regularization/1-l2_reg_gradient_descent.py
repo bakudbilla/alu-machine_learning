@@ -9,7 +9,6 @@ import numpy as np
 def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     """
     Function to implement L2 regulatization using gradient descent
-    
 
     """
     m = Y.shape[1]

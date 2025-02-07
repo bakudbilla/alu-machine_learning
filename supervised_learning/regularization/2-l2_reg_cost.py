@@ -6,8 +6,7 @@ import tensorflow as tf
 
 def l2_reg_cost(cost):
     """
-    Function to calculate the L2 regularization in tf
-    
+    Function to calculate the L2 regularization in tf 
 
     """
 
