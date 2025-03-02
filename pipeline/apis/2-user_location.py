@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-Fetches and prints the location of a specified GitHub user using the GitHub API.
+Uses the GitHub API to print the location of a specific user,
+where user is passed as first argument of the script with full API URL
 
-The user is provided as the first argument to the script with the full API URL.
-
-Example usage:
-    "./2-user_location.py https://api.github.com/users/holbertonschool"
+ex) "./2-user_location.py https://api.github.com/users/holbertonschool"
 """
+
 
 import requests
 from sys import argv
 from time import time
+
 
 if __name__ == "__main__":
     if len(argv) < 2:
@@ -35,4 +35,3 @@ if __name__ == "__main__":
                 print('Not found')
     except Exception as err:
         print('Not found')
-
