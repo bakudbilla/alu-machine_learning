@@ -6,8 +6,7 @@ import requests
 def availableShips(passengerCount):
     """
     Function to get request
-    Args:
-        passengerCount: number of passangers
+       - passengerCount: number of passangers
     Returns: List of starships
     """
     starships = []

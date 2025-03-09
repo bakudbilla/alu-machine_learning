@@ -6,9 +6,7 @@ import requests
 def sentientPlanets():
     """
     Function to get request from names of planets
-    Args:
-        passengerCount: number of passangers
-    Returns: List of starships
+    Returns: List of names of sentient species
     """
     planets = []
     url = 'https://swapi-api.hbtn.io/api/species/'
