@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Long Short Term Memory Unit"""
 
 import numpy as np
