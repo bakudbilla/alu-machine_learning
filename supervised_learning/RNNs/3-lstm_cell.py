@@ -1,84 +1,93 @@
 #!/usr/bin/env python3
-"""Long Short Term Memory Unit"""
+"""
+LSTM Cell
+"""
+
 
 import numpy as np
 
 
 class LSTMCell:
-    """class LSTM
-    class constructor: def __init__(self, i, h, o)
     """
-
+    Represents a LSTM unit
+    """
     def __init__(self, i, h, o):
-        """class constructor def __init__(self, i, h, o):
-        i is the dimensionality of the data
-        h is the dimensionality of the hidden state
-        o is the dimensionality of the outputs
-        Creates the public instance attributes
-        Wf, Wu, Wc, Wo, Wy, bf, bu, bc, bo,
-        by that represent the weights and biases of the cell
+        """
+        parameters:
+          i: dimensionality of the data
+          h: dimensionality of the hidden state
+          o: dimensionality of the outputs
 
-        Wf and bf are for the forget gate
-        Wu and bu are for the update gate
-        Wc and bc are for the intermediate cell state
-        Wo and bo are for the output gate
-        Wy and by are for the outputs
+        creates public instance attributes:
+          Wf and bf are for the forget gate weights and biases
+          Wu and bu are for the update gate weights and biases
+          Wc and bc are for the intermediate cell state weights and biases
+          Wo and bo are for the output gate weights and biases
+          Wy and by are for the outputs weights and biases
 
-        The weights should be initialized using a random
-        normal distribution in the order listed above
-        The weights will be used on the right
-        side for matrix multiplication
-        The biases should be initialized as zeros"""
-
-        self.Wf = np.random.normal(size=(i + h, h))
-        self.Wu = np.random.normal(size=(i + h, h))
-        self.Wc = np.random.normal(size=(i + h, h))
-        self.Wo = np.random.normal(size=(i + h, h))
-        self.Wy = np.random.normal(size=(h, o))
+        - weights should be initialized using random normal distribution
+        - weights will be used on the right side for matrix multiplication
+        - biases should be initialized as zeros
+        """
         self.bf = np.zeros((1, h))
         self.bu = np.zeros((1, h))
         self.bc = np.zeros((1, h))
         self.bo = np.zeros((1, h))
         self.by = np.zeros((1, o))
+        self.Wf = np.random.normal(size=(h + i, h))
+        self.Wu = np.random.normal(size=(h + i, h))
+        self.Wc = np.random.normal(size=(h + i, h))
+        self.Wo = np.random.normal(size=(h + i, h))
+        self.Wy = np.random.normal(size=(h, o))
 
     def softmax(self, x):
-        """activation fxn (softmax) where
-        x is the value to perform softmax"""
-
-        fxn = np.exp(x - np.max(x, axis=1, keepdims=True))
-        softmax = fxn / fxn.sum(axis=1, keepdims=True)
+        """
+        Softmax function
+          x: the value to perform softmax on to generate output of cell
+        """
+        a_x = np.exp(x - np.max(x, axis=1, keepdims=True))
+        softmax = a_x / a_x.sum(axis=1, keepdims=True)
         return softmax
+
     def sigmoid(self, x):
-        """activation fxn (sigmoid) where
-        X is the value to perform the sigmoid on"""
+        """
+        Sigmoid function
+          x: the value to perform sigmoid on
+        """
         sigmoid = 1 / (1 + np.exp(-x))
         return sigmoid
 
     def forward(self, h_prev, c_prev, x_t):
-        """Function that performs forward propagation for one time step
-        x_t is a numpy.ndarray of shape (m, i)
-        that contains the data input for the cell
-        m is the batche size for the data
+        """
+        Forward propagation for one time step
 
-        h_prev is a numpy.ndarray of shape (m, h)
-        containing the previous hidden state
-        c_prev is a numpy.ndarray of shape (m, h)
-        containing the previous cell state
-        The output of the cell should use
-        a softmax activation function
+        parameters:
+            h_prev [numpy.ndarray of shape (m, h)]:
+                contains previous hidden state
+                m: the batch size for the data
+                h: dimensionality of hidden state
+            c_prev [numpy.ndarray of shape (m, h)]:
+                contains previous cell state
+                m: the batch size for the data
+                h: dimensionality of hidden state
+            x_t [numpy.ndarray of shape (m, i)]:
+                contains data input for the cell
+                i: dimensionality of the data
 
-        Returns: h_next, c_next, y
-        h_next is the next hidden state
-        c_next is the next cell state
-        y is the output of the cell"""
+        output of the cell should use softmax activation function
 
-        summation = np.concatenate((h_prev, x_t), axis=1)
-        forget_gate = self.sigmoid(np.matmul(summation, self.Wf) + self.bf)
-        update_gate = self.sigmoid(np.matmul(summation, self.Wu) + self.bu)
-        icell_state = np.tanh(np.matmul(summation, self.Wc) + self.bc)
-
-        c_nxt = forget_gate * c_prev + update_gate * icell_state
-        output_gt = self.sigmoid(np.matmul(summation, self.Wo) + self.bo)
-        h_nxt = output_gt * np.tanh(c_nxt)
-        y = self.softmax(np.matmul(h_nxt, self.Wy) + self.by)
-        return h_nxt, c_nxt, y
+        returns:
+            h_next, c_next, y:
+            h_next: the next hidden state
+            c_next: the next cell state
+            y: the output of the cell
+        """
+        concat = np.concatenate((h_prev, x_t), axis=1)
+        u_gate = self.sigmoid(np.matmul(concat, self.Wu) + self.bu)
+        f_gate = self.sigmoid(np.matmul(concat, self.Wf) + self.bf)
+        c_gate = np.tanh(np.matmul(concat, self.Wc) + self.bc)
+        c_next = u_gate * c_gate + f_gate * c_prev
+        o_gate = self.sigmoid(np.matmul(concat, self.Wo) + self.bo)
+        h_next = o_gate * np.tanh(c_next)
+        y = self.softmax(np.matmul(h_next, self.Wy) + self.by)
+        return h_next, c_next, y
